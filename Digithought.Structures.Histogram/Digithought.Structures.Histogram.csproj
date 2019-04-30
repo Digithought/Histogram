@@ -4,6 +4,17 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Digithought.Structures.Histogram</AssemblyName>
     <RootNamespace>Digithought.Structures</RootNamespace>
+    <Authors>Nathan Allan</Authors>
+    <Company>Digithought</Company>
+    <Product>Digithought.Structures</Product>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Simple double precision histogram of configurable number of bins, with KMeans functionality</Description>
+    <Copyright>© Copyright 2019 Dighthought LLC</Copyright>
+    <PackageProjectUrl>https://github.com/Digithought/Histogram</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Digithought/Histogram</RepositoryUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/Digithought/Histogram/master/LICENSE</PackageLicenseUrl>
+    <PackageTags>Histogram KMeans</PackageTags>
+    <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
 
 </Project>
