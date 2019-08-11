@@ -5,11 +5,15 @@ using System.Text;
 
 namespace Digithought.Structures
 {
+	/// <summary> Histogram of double based normalized (0-1) values. </summary>
 	public class Histogram
 	{
 		private const int MaxIterations = 20;
 
+		/// <summary> The sum of the counts in all bins. </summary>
 		public int Total { get; private set; }
+
+		/// <summary> The raw data bins. </summary>
 		public int[] Data { get; private set; }
 
 		public Histogram(int bins)
@@ -23,12 +27,14 @@ namespace Digithought.Structures
 			Total = Data.Sum();
 		}
 
+		/// <summary> Resets all bins to 0 </summary>
 		public void Reset()
 		{
 			Array.Clear(Data, 0, Data.Length);
 			Total = 0;
 		}
 
+		/// <summary> Accumulates the given value into the appropriate bin. </summary>
 		public void AddData(double value)
 		{
 			++Data[GetAddress(value)];
@@ -46,21 +52,23 @@ namespace Digithought.Structures
 			}
 		}
 
-		/// <summary> Re-scale the histogram, smoothing for quantification errors. </summary>
+		/// <summary> Re-scale the histogram, smoothing for granularity errors. </summary>
 		public void Scale(double value)
 		{
 			var error = 0.0;
 			for (var i = 0; i < Data.Length; ++i)
 			{
+				var oldValue = Data[i];
 				var newValue = (double)Data[i] * value;
 				Data[i] = Convert.ToInt32(newValue + error);
 				error = newValue - Data[i];
+				Total += Data[i] - oldValue;
 			}
 		}
 
 		public int GetAddress(double value)
 		{
-			return Convert.ToInt32(Math.Min(1, Math.Max(0, value)) * (Data.Length - 1));
+			return Convert.ToInt32(Math.Min(1.0, Math.Max(0.0, value)) * (Data.Length - 1));
 		}
 
 		public double GetValue(int index)
@@ -73,6 +81,7 @@ namespace Digithought.Structures
 			return KMeans(Data, k);
 		}
 
+		/// <summary> Returns the value (not index) of the first bin that has more than a given number of entries. </summary>
 		public double Min(int threshold = 0)
 		{
 			for (var i = 1; i < Data.Length; ++i)
@@ -81,6 +90,7 @@ namespace Digithought.Structures
 			return -1;
 		}
 
+		/// <summary> Returns the value (not index) of the last bin that has more than a given number of entries. </summary>
 		public double Max(int threshold = 0)
 		{
 			for (var i = Data.Length - 1; i >= 0; --i)
@@ -177,6 +187,7 @@ namespace Digithought.Structures
 			return bestIndex;
 		}
 
+		/// <summary> Returns true if the two given values are equal within the error margin for floating points. </summary>
 		public static bool Approximately(double a, double b)
 		{
 			return Math.Abs(b - a) < Math.Max(double.Epsilon * Math.Max(Math.Abs(a), Math.Abs(b)), double.Epsilon * 8);
